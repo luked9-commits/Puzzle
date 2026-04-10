@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Unlock the Next Clue</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #login {
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #error {
+      color: #ff6b6b;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="login">
+  <h2>Enter Password</h2>
+  <p>Think carefully… you already know the answer.</p>
+
+  <input type="password" id="password" placeholder="Password">
+  <br>
+  <button onclick="checkPassword()">Unlock</button>
+
+  <p id="error"></p>
+</div>
+
+<script>
+function checkPassword() {
+  const input = document.getElementById("password").value;
+  const correctPassword = "yourpasswordhere"; // CHANGE THIS
+
+  if (input === correctPassword) {
+
+    // 🔥 FULLSCREEN CRISP REVEAL
+    document.body.innerHTML = `
+      <style>
+        body {
+          margin: 0;
+          background: black;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          overflow: hidden;
+        }
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          width: auto;
+          height: auto;
+          image-rendering: auto;
+        }
+      </style>
+      <img src="https://i.ibb.co/LBwPzxd/daypuzzle.png">
+    `;
+
+  } else {
+    document.getElementById("error").innerText = "Incorrect password, try again.";
+  }
+}
+</script>
+
+</body>
+</html>
