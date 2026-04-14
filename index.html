@@ -73,17 +73,11 @@ setTimeout(async () => {
   const id = atob("WnZzSjZCei8=");
   const file = atob("ZGF5cHV6emxlLnBuZw==");
 
-  const url = base + id;
+  const url = base + id + file;
 
-  console.log("DEBUG URL:", url); // 
+  console.log("DEBUG URL:", url); // optional check
 
   const response = await fetch(url);
-
-  if (!response.ok) {
-    document.body.innerHTML = "<p style='color:white'>Image failed to load</p>";
-    return;
-  }
-
   const blob = await response.blob();
   const imgUrl = URL.createObjectURL(blob);
 
