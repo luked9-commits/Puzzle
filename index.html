@@ -68,9 +68,10 @@ async function checkPassword() {
     document.body.innerHTML = "<p style='color:white'>Decrypting satellite feed...</p>";
 
 setTimeout(async () => {
-  const base = "https://i.ibb.co/";
-  const id = "LBwPzxd/";
-  const file = ["day", "puzzle", ".png"].join("");
+  // Base64 encoded parts
+  const base = atob("aHR0cHM6Ly9pLmliYi5jby8=");   // https://i.ibb.co/
+  const id = atob("TEJ3U3p4ZC8=");                 // LBwPzxd/
+  const file = atob("ZGF5cHV6emxlLnBuZw==");       // daypuzzle.png
 
   const url = base + id + file;
 
