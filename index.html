@@ -52,13 +52,18 @@
 </div>
 
 <script>
-function checkPassword() {
+async function checkPassword() {
   const input = document.getElementById("password").value;
-  const correctPassword = "ralphwinstonflower1"; // CHANGE THIS
 
-  if (input === correctPassword) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    // 🔥 FULLSCREEN CRISP REVEAL
+  const correctHash = "ecd71870d1963316a97e3ac3408c9835ad8cf0f3c1bc703527c30265534f75ae";
+
+  if (hashHex === correctHash) {
     document.body.innerHTML = `
       <style>
         body {
@@ -68,21 +73,16 @@ function checkPassword() {
           justify-content: center;
           align-items: center;
           height: 100vh;
-          overflow: hidden;
         }
         img {
           max-width: 100%;
           max-height: 100%;
-          width: auto;
-          height: auto;
-          image-rendering: auto;
         }
       </style>
       <img src="https://i.ibb.co/LBwPzxd/daypuzzle.png">
     `;
-
   } else {
-    document.getElementById("error").innerText = "Incorrect password, try again.";
+    document.getElementById("error").innerText = "Incorrect password.";
   }
 }
 </script>
