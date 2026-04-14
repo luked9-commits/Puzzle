@@ -68,14 +68,22 @@ async function checkPassword() {
     document.body.innerHTML = "<p style='color:white'>Decrypting satellite feed...</p>";
 
 setTimeout(async () => {
-  // Base64 encoded parts
-  const base = atob("aHR0cHM6Ly9pLmliYi5jby8=");   // https://i.ibb.co/
-  const id = atob("TEJ3U3p4ZC8=");                 // LBwPzxd/
-  const file = atob("ZGF5cHV6emxlLnBuZw==");       // daypuzzle.png
+
+  const base = atob("aHR0cHM6Ly9pLmliYi5jby8=");
+  const id = atob("TEJ3U3p4ZC8=");
+  const file = atob("ZGF5cHV6emxlLnBuZw==");
 
   const url = base + id + file;
 
+  console.log("DEBUG URL:", url); // 
+
   const response = await fetch(url);
+
+  if (!response.ok) {
+    document.body.innerHTML = "<p style='color:white'>Image failed to load</p>";
+    return;
+  }
+
   const blob = await response.blob();
   const imgUrl = URL.createObjectURL(blob);
 
@@ -86,6 +94,7 @@ setTimeout(async () => {
 
   document.body.innerHTML = "";
   document.body.appendChild(img);
+
 }, 1200);
 
   } else {
