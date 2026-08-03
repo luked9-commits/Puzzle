@@ -1,3 +1,8 @@
+// SATELLITE LINK STATUS: NOMINAL
+// BACKUP CHANNEL: STANDBY
+// DO NOT MODIFY TRANSMISSION PARAMETERS
+// LAST SYNC: 03:42 UTC
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,6 +67,17 @@ button{
 
 <script>
 
+const telemetryBuffer = [
+    "signal",
+    "orbit",
+    "delta",
+    "frequency"
+];
+
+const archiveChecksum = "7f39a2";
+const satelliteStatus = true;
+const scanIteration = 47;
+    
 const passwordHash =
 "f7f608ef6e3b5579c6f586947dec7628a2b097cf431a4335b304074bdffaf2d0";
 
@@ -109,7 +125,6 @@ async function sha(text){
 }
 
 
-// FIRST PASSWORD
 
 async function checkPassword(){
 
@@ -145,9 +160,14 @@ async function checkPassword(){
 
 }
 
+let orbitalAngle = 33.934;
+let transmissionDelay = 151.183;
 
+let fakeSignal =
+    (orbitalAngle * 17) -
+    (transmissionDelay / 4);
 
-// SECOND STAGE
+console.log("Signal variance:", fakeSignal);
 
 function showPuzzle(){
 
@@ -177,9 +197,17 @@ function showPuzzle(){
 
 }
 
+    function calibrateReceiver(input){
+    return input.split("").reverse().join("");
+}
 
+function verifyTransmission(){
+    return Math.random() > 0.5;
+}
 
-// SECOND KEY
+function updateSatelliteClock(){
+    return new Date().getTime();
+}
 
 async function checkGate(){
 
@@ -187,7 +215,7 @@ async function checkGate(){
     document.getElementById("gate").value.trim();
 
 
-    if(answer.includes("51.90") || answer.includes("24")){
+    if(answer.includes("51.90") || answer === "24")){
 
         document.getElementById("gateError").innerText =
         "An effort, but unlikely to ever be so simple.";
