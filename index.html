@@ -1,100 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Unlock the Next Clue</title>
-  <style>
-    body {
-      margin: 0;
-      background: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlock the Next Clue</title>
 
-    #login {
-      text-align: center;
-    }
+<style>
+body{
+    margin:0;
+    background:#111;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    text-align:center;
+}
 
-    input {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
+#container{
+    max-width:700px;
+    padding:20px;
+}
 
-    button {
-      padding: 10px 20px;
-      margin-top: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+input{
+    padding:10px;
+    font-size:16px;
+    margin-top:10px;
+}
 
-    #error {
-      color: #ff6b6b;
-      margin-top: 10px;
-    }
-  </style>
+button{
+    padding:10px 20px;
+    margin-top:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+#error{
+    color:#ff6b6b;
+    margin-top:10px;
+}
+</style>
 </head>
+
 <body>
 
-<div id="login">
-  <h2>Enter Password</h2>
-  <p>Think carefully… you already know the answer.</p>
+<div id="container">
 
-  <input type="password" id="password" placeholder="Password">
-  <br>
-  <button onclick="checkPassword()">Unlock</button>
+<h2>Enter Password</h2>
+<p>Think carefully… you already know the answer.</p>
 
-  <p id="error"></p>
+<input type="password" id="password" placeholder="Password">
+<br>
+<button onclick="checkPassword()">Unlock</button>
+
+<p id="error"></p>
+
 </div>
 
 <script>
-async function checkPassword() {
-  const input = document.getElementById("password").value;
 
-  const encoder = new TextEncoder();
-  const data = encoder.encode(input);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+const passwordHash =
+"f7f608ef6e3b5579c6f586947dec7628a2b097cf431a4335b304074bdffaf2d0";
 
-  const correctHash = "f7f608ef6e3b5579c6f586947dec7628a2b097cf431a4335b304074bdffaf2d0";
+const keyHash =
+"74e3bc25d27f6a48e7c566dc71743ef5131c2e61c352adad7b108383ea7766db";
 
-  if (hashHex === correctHash) {
+const clue = [
+"Rm91ciBjbGVhciBwYXRocyBhcmUgc2hvd24u",
+"Q29udmVydCB0aGUgZmlyc3RzIGZvciBlYWNoIGFzIHdyaXR0ZW4s",
+"RmluZCB0aGUgc3VtIGJlZm9yZSBwYXNzaW5nIHVuZGVyIGNsZWFyYW5jZTs=",
+"QSBrZXku"
+];
 
-    document.body.innerHTML = "<p style='color:white'>Decrypting satellite feed...</p>";
+const reward =
+"YWxmdHp5bg==";
 
-setTimeout(async () => {
+const mapParts = [
 
-  const base = atob("aHR0cHM6Ly9pLmliYi5jby8=");
-  const id = atob("WnZzSjZCei8=");
-  const file = atob("ZGF5cHV6emxlLnBuZw==");
+"aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS9tYXBzL0AtMzMuOTM0MjU5MywxNTEuMTgzNDE5NCw4YSw3NXksMjcyLjk5aCw5NC42MnQvZGF0YT",
 
-  const url = base + id + file;
+"0hM203ITFlMSEzbTUhMXNvNjBjMzVfdGNsbVIxZEFLZV9TUHd3ITJlMCE2c2h0dHBzOiUyRiUyRnN0cmVldHZpZXdwaXhlbHMtcGEuZ29v",
 
-  console.log("DEBUG URL:", url); // optional check
+"Z2xlYXBpcy5jb20lMkZ2MSUyRnRodW1ibmFpbCUzRmNiX2NsaWVudCUzRG1hcHNfc3YudGFjdGlsZSUyNnclM0Q5MDAlMjZoJTNENjAwJT",
 
-  const response = await fetch(url);
-  const blob = await response.blob();
-  const imgUrl = URL.createObjectURL(blob);
+"I2cGl0Y2glM0QtNC42MjI4NjQ2MTgxNzA0OTYlMjZwYW5vaWQlM0RvNjBjMzVfdGNsbVIxZEFLZV9TUHd3JTI2eWF3JTNEMjcyLjk5MDQ1",
 
-  const img = document.createElement("img");
-  img.src = imgUrl;
-  img.style.maxWidth = "100%";
-  img.style.maxHeight = "100%";
+"Mjc3ODI1MTA0ITdpMTYzODQhOGk4MTkyP2VudHJ5PXR0dSZnX2VwPUVnb3lNREkyTURjeU9TNHdJS1hNRFNvQVNBRlFBdyUzRCUzRA=="
 
-  document.body.innerHTML = "";
-  document.body.appendChild(img);
+];
 
-}, 1200);
+async function sha(text){
 
-  } else {
-    document.getElementById("error").innerText = "Incorrect password.";
-  }
+    const enc = new TextEncoder();
+    const buf = await crypto.subtle.digest(
+        "SHA-256",
+        enc.encode(text)
+    );
+
+    return Array.from(new Uint8Array(buf))
+        .map(x=>x.toString(16).padStart(2,"0"))
+        .join("");
+
 }
+
+async function checkPassword(){
+
+    const hash = await sha(
+        document.getElementById("password").value
+    );
+
+    if(hash!==passwordHash){
+
+        document.getElementById("error").innerText="Incorrect password.";
+        return;
+
+    }
+
+    showPuzzle();
+
+}
+
+function showPuzzle(){
+
+    document.getElementById("container").innerHTML=`
+
+<h2>Satellite Feed Decrypted</h2>
+
+<p>${atob(clue[0])}</p>
+
+<p>${atob(clue[1])}</p>
+
+<p>${atob(clue[2])}</p>
+
+<p><strong>${atob(clue[3])}</strong></p>
+
+<br>
+
+<input id="gate" placeholder="Enter key">
+
+<br>
+
+<button onclick="checkGate()">Continue</button>
+
+<p id="gateError" style="color:#ff6b6b;"></p>
+
+`;
+
+}
+
+async function checkGate(){
+
+    const hash = await sha(
+        document.getElementById("gate").value
+    );
+
+    if(hash!==keyHash){
+
+        document.getElementById("gateError").innerText="Incorrect.";
+        return;
+
+    }
+
+    document.getElementById("container").innerHTML=`
+<h1 style="font-size:4em;letter-spacing:8px;">
+${atob(reward)}
+</h1>`;
+
+    setTimeout(()=>{
+
+        const url = atob(mapParts.join(""));
+        window.location.href=url;
+
+    },2500);
+
+}
+
 </script>
 
 </body>
