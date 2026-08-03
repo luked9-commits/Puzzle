@@ -61,7 +61,7 @@ async function checkPassword() {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-  const correctHash = "db8f7c14e5092db1a49d670a41dec4692dc38fa0bb63cae5ea0cd367d987f022";
+  const correctHash = "f7f608ef6e3b5579c6f586947dec7628a2b097cf431a4335b304074bdffaf2d0";
 
   if (hashHex === correctHash) {
 
