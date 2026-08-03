@@ -168,11 +168,20 @@ function showPuzzle(){
 
 async function checkGate(){
 
-    const hash = await sha(
-        document.getElementById("gate").value
-    );
+    const answer = document.getElementById("gate").value.trim();
 
-    if(hash!==keyHash){
+    // Special clue responses
+    if (answer.includes("51.90") || answer.includes("24")) {
+
+        document.getElementById("gateError").innerText =
+        "An effort, but unlikely to ever be so simple.";
+
+        return;
+    }
+
+    const hash = await sha(answer);
+
+    if(hash !== keyHash){
 
         document.getElementById("gateError").innerText="Incorrect.";
         return;
@@ -180,9 +189,9 @@ async function checkGate(){
     }
 
     document.getElementById("container").innerHTML=`
-<h1 style="font-size:4em;letter-spacing:8px;">
-${atob(reward)}
-</h1>`;
+    <h1 style="font-size:4em;letter-spacing:8px;">
+    ${atob(reward)}
+    </h1>`;
 
     setTimeout(()=>{
 
@@ -190,6 +199,8 @@ ${atob(reward)}
         window.location.href=url;
 
     },2500);
+
+}
 
 }
 
