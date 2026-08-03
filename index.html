@@ -60,6 +60,8 @@ button{
 
 <script>
 
+<script>
+
 const passwordHash =
 "f7f608ef6e3b5579c6f586947dec7628a2b097cf431a4335b304074bdffaf2d0";
 
@@ -90,114 +92,144 @@ const mapParts = [
 
 ];
 
+
 async function sha(text){
 
     const enc = new TextEncoder();
+
     const buf = await crypto.subtle.digest(
         "SHA-256",
         enc.encode(text)
     );
 
     return Array.from(new Uint8Array(buf))
-        .map(x=>x.toString(16).padStart(2,"0"))
+        .map(x => x.toString(16).padStart(2,"0"))
         .join("");
 
 }
 
-async function checkPassword(event){
 
-    const newTab = window.open("", "_blank");
+// FIRST PASSWORD
 
-    const hash = await sha(
-        document.getElementById("password").value
-    );
+async function checkPassword(){
 
-    if(hash!==passwordHash){
+    const input =
+    document.getElementById("password").value;
 
-        if(newTab) newTab.close();
+    const hash = await sha(input);
 
-        document.getElementById("error").innerText="Incorrect password.";
+    if(hash !== passwordHash){
+
+        document.getElementById("error").innerText =
+        "Incorrect password.";
+
         return;
 
     }
 
+
     const url = atob(mapParts.join(""));
 
-    if(newTab){
-        newTab.location.href = url;
-    }
+    window.open(url, "_blank");
+
 
     document.getElementById("container").innerHTML =
     "<h2>Decrypting satellite feed...</h2>";
 
+
     setTimeout(() => {
+
         showPuzzle();
+
     },1200);
 
 }
 
+
+
+// SECOND STAGE
+
 function showPuzzle(){
 
-    document.getElementById("container").innerHTML=`
+    document.getElementById("container").innerHTML = `
 
-<h2>Satellite Feed Decrypted</h2>
+    <h2>Satellite Feed Decrypted</h2>
 
-<p>${atob(clue[0])}</p>
+    <p>${atob(clue[0])}</p>
 
-<p>${atob(clue[1])}</p>
+    <p>${atob(clue[1])}</p>
 
-<p>${atob(clue[2])}</p>
+    <p>${atob(clue[2])}</p>
 
-<p><strong>${atob(clue[3])}</strong></p>
+    <p><strong>${atob(clue[3])}</strong></p>
 
-<br>
+    <br>
 
-<input id="gate" placeholder="Enter key">
+    <input id="gate" placeholder="Enter key">
 
-<br>
+    <br>
 
-<button onclick="checkGate()">Continue</button>
+    <button onclick="checkGate()">Continue</button>
 
-<p id="gateError" style="color:#ff6b6b;"></p>
+    <p id="gateError" style="color:#ff6b6b;"></p>
 
-`;
+    `;
 
 }
 
+
+
+// SECOND KEY
+
 async function checkGate(){
 
-    const answer = document.getElementById("gate").value.trim();
+    const answer =
+    document.getElementById("gate").value.trim();
 
-    if (answer.includes("51.90") || answer.includes("24")) {
+
+    if(answer.includes("51.90") || answer.includes("24")){
 
         document.getElementById("gateError").innerText =
         "An effort, but unlikely to ever be so simple.";
 
         return;
+
     }
+
 
     const hash = await sha(answer);
 
+
     if(hash !== keyHash){
 
-        document.getElementById("gateError").innerText="Incorrect.";
+        document.getElementById("gateError").innerText =
+        "Incorrect.";
+
         return;
 
     }
 
-    document.getElementById("container").innerHTML=`
+
+    document.getElementById("container").innerHTML = `
+
     <h1 style="font-size:4em;letter-spacing:8px;">
     ${atob(reward)}
-    </h1>`;
+    </h1>
 
-    setTimeout(()=>{
+    `;
+
+
+    setTimeout(() => {
 
         const url = atob(mapParts.join(""));
-        window.location.href=url;
+
+        window.location.href = url;
 
     },2500);
 
 }
+
+</script>
 
 </script>
 
