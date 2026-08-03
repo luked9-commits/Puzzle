@@ -117,7 +117,17 @@ async function checkPassword(){
 
     }
 
+    document.getElementById("container").innerHTML =
+"<h2>Decrypting satellite feed...</h2>";
+
+setTimeout(() => {
+
+    const url = atob(mapParts.join(""));
+    window.open(url, "_blank");
+
     showPuzzle();
+
+}, 1200);
 
 }
 
