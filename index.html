@@ -52,7 +52,7 @@ button{
 
 <input type="password" id="password" placeholder="Password">
 <br>
-<button onclick="checkPassword()">Unlock</button>
+<button onclick="checkPassword(event)">Unlock</button>
 
 <p id="error"></p>
 
@@ -104,7 +104,9 @@ async function sha(text){
 
 }
 
-async function checkPassword(){
+async function checkPassword(event){
+
+    const newTab = window.open("", "_blank");
 
     const hash = await sha(
         document.getElementById("password").value
@@ -112,20 +114,27 @@ async function checkPassword(){
 
     if(hash!==passwordHash){
 
+        if(newTab) newTab.close();
+
         document.getElementById("error").innerText="Incorrect password.";
         return;
 
     }
 
+    const url = atob(mapParts.join(""));
+
+    if(newTab){
+        newTab.location.href = url;
+    }
+
     document.getElementById("container").innerHTML =
-"<h2>Decrypting satellite feed...</h2>";
+    "<h2>Decrypting satellite feed...</h2>";
 
-const url = atob(mapParts.join(""));
-window.open(url, "_blank");
+    setTimeout(() => {
+        showPuzzle();
+    },1200);
 
-setTimeout(() => {
-    showPuzzle();
-}, 1200);
+}
 
 }
 
