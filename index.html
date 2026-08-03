@@ -36,6 +36,30 @@ button{
     cursor:pointer;
 }
 
+#futureBox{
+    position:fixed;
+    bottom:10px;
+    left:50%;
+    transform:translateX(-50%);
+    opacity:0.35;
+    font-size:12px;
+}
+
+#futureBox input{
+    padding:6px;
+    font-size:12px;
+}
+
+#futureBox button{
+    padding:6px 10px;
+    font-size:12px;
+}
+
+#futureError{
+    color:#ff6b6b;
+    margin:5px;
+}
+    
 #error{
     color:#ff6b6b;
     margin-top:10px;
@@ -67,6 +91,16 @@ button{
 // BACKUP CHANNEL: STANDBY
 // DO NOT MODIFY TRANSMISSION PARAMETERS
 // LAST SYNC: 03:42 UTC
+
+    function futureCheck(){
+
+    const input =
+    document.getElementById("futureInput").value;
+
+    document.getElementById("futureError").innerText =
+    "Not quite yet...";
+
+}
     
 const telemetryBuffer = [
     "signal",
@@ -262,5 +296,11 @@ async function checkGate(){
 
 </script>
 
+<div id="futureBox">
+    <input id="futureInput" placeholder="Enter transmission code">
+    <button onclick="futureCheck()">Submit</button>
+    <p id="futureError"></p>
+</div>
+    
 </body>
 </html>
