@@ -220,10 +220,24 @@ function showPuzzle(){
 
 }
 
-    function futureCheck(){
+async function futureCheck(){
 
-    document.getElementById("futureError").innerText =
-    "Not quite yet...";
+    const input =
+    document.getElementById("futureInput").value.trim();
+
+    const hash = await sha(input);
+
+    if(hash === "74e3bc25d27f6a48e7c566dc71743ef5131c2e61c352adad7b108383ea7766db"){
+
+        document.getElementById("futureError").innerText =
+        "Transmission accepted.";
+
+    } else {
+
+        document.getElementById("futureError").innerText =
+        "Invalid transmission code.";
+
+    }
 
 }
 
