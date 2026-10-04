@@ -226,16 +226,15 @@ async function futureCheck(){
 
     const hash = await sha(input);
 
-    console.log("Transmission input:", input);
-    console.log("Transmission hash:", hash);
-
     if(hash === keyHash){
 
-        document.getElementById("futureBox").innerHTML = `
-            <strong style="font-size:18px;">
+        document.getElementById("container").innerHTML = `
+            <h1 style="font-size:4em;letter-spacing:8px;">
                 ${atob(reward)}
-            </strong>
+            </h1>
         `;
+
+        document.getElementById("futureBox").style.display = "none";
 
     } else {
 
