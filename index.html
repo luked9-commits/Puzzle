@@ -222,12 +222,14 @@ function showPuzzle(){
 
 async function futureCheck(){
 
-    const input =
-    document.getElementById("futureInput").value.trim();
+    const input = document.getElementById("futureInput").value.trim();
 
     const hash = await sha(input);
 
-    if(hash === "74e3bc25d27f6a48e7c566dc71743ef5131c2e61c352adad7b108383ea7766db"){
+    console.log("Transmission input:", input);
+    console.log("Transmission hash:", hash);
+
+    if(hash === keyHash){
 
         document.getElementById("futureBox").innerHTML = `
             <strong style="font-size:18px;">
