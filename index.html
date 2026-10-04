@@ -59,7 +59,7 @@ button{
     color:#ff6b6b;
     margin:5px;
 }
-    
+
 #error{
     color:#ff6b6b;
     margin-top:10px;
@@ -90,7 +90,7 @@ button{
 // DO NOT MODIFY TRANSMISSION PARAMETERS
 // LAST SYNC: 03:42 UTC
 
-    
+
 const telemetryBuffer = [
     "signal",
     "orbit",
@@ -101,22 +101,41 @@ const telemetryBuffer = [
 const archiveChecksum = "7f39a2";
 const satelliteStatus = true;
 const scanIteration = 47;
-    
+
+
+// MAIN PASSWORD
+
 const passwordHash =
 "f7f608ef6e3b5579c6f586947dec7628a2b097cf431a4335b304074bdffaf2d0";
+
+
+// KEY FOR MAIN PUZZLE
 
 const keyHash =
 "74e3bc25d27f6a48e7c566dc71743ef5131c2e61c352adad7b108383ea7766db";
 
-const clue = [
-"Rm91ciBjbGVhciBwYXRocyBhcmUgc2hvd24u",
-"Q29udmVydCB0aGUgZmlyc3RzIGZvciBlYWNoIGFzIHdyaXR0ZW4s",
-"RmluZCB0aGUgc3VtIGJlZm9yZSBwYXNzaW5nIHVuZGVyIGNsZWFyYW5jZTs=",
-"QSBrZXku"
-];
+
+// HIDDEN TRANSMISSION HASH
+
+const transmissionHash =
+"74e3bc25d27f6a48e7c566dc71743ef5131c2e61c352adad7b108383ea7766db";
+
+
+// DECODED PUZZLE CLUE:
+//
+// Four clear paths, two words each
+// convert the firsts of every half,
+// Sum their total score, then product with the under clearance!
+
+const clue =
+"Rm91ciBjbGVhciBwYXRocywgdHdvIHdvcmRzIGVhY2gKY29udmVydCB0aGUgZmlyc3RzIG9mIGV2ZXJ5IGhhbGYsClN1bSB0aGVpciB0b3RhbCBzY29yZSwgdGhlbiBwcm9kdWN0IHdpdGggdGhlIHVuZGVyIGNsZWFyYW5jZSE=";
+
+
+// FINAL REWARD
 
 const reward =
 "YWxmdHp5bg==";
+
 
 const mapParts = [
 
@@ -126,7 +145,7 @@ const mapParts = [
 
 "Z2xlYXBpcy5jb20lMkZ2MSUyRnRodW1ibmFpbCUzRmNiX2NsaWVudCUzRG1hcHNfc3YudGFjdGlsZSUyNnclM0Q5MDAlMjZoJTNENjAwJT",
 
-"I2cGl0Y2glM0QtNC42MjI4NjQ2MTgxNzA0OTYlMjZwYW5vaWQlM0RvNjBjMzVfdGNsbVIxZEFLZV9TUHd3JTI2eWF3JTNEMjcyLjk5MDQ1",
+"I2cGl0Y2glM0QtNC42MjI4NjQ2MTgxNzA0OTYlMjZwYW5vaWQmM0RvNjBjMzVfdGNsbVIxZEFLZV9TUHd3JTI2eWF3JTNEMjcyLjk5MDQ1",
 
 "Mjc3ODI1MTA0ITdpMTYzODQhOGk4MTkyP2VudHJ5PXR0dSZnX2VwPUVnb3lNREkyTURjeU9TNHdJS1hNRFNvQVNBRlFBdyUzRCUzRA=="
 
@@ -147,7 +166,6 @@ async function sha(text){
         .join("");
 
 }
-
 
 
 async function checkPassword(){
@@ -183,6 +201,7 @@ async function checkPassword(){
 
 }
 
+
 let orbitalAngle = 33.934;
 let transmissionDelay = 151.183;
 
@@ -192,19 +211,14 @@ let fakeSignal =
 
 console.log("Signal variance:", fakeSignal);
 
+
 function showPuzzle(){
 
     document.getElementById("container").innerHTML = `
 
     <h2>Satellite Feed Decrypted</h2>
 
-    <p>${atob(clue[0])}</p>
-
-    <p>${atob(clue[1])}</p>
-
-    <p>${atob(clue[2])}</p>
-
-    <p><strong>${atob(clue[3])}</strong></p>
+    <p style="white-space:pre-line;">${atob(clue)}</p>
 
     <br>
 
@@ -220,18 +234,24 @@ function showPuzzle(){
 
 }
 
+
+// HIDDEN TRANSMISSION CHECK
+
 async function futureCheck(){
 
-    const input = document.getElementById("futureInput").value.trim();
+    const input =
+    document.getElementById("futureInput").value.trim();
 
     const hash = await sha(input);
 
-    if(hash === keyHash){
+    if(hash === transmissionHash){
 
         document.getElementById("container").innerHTML = `
-            <h1 style="font-size:4em;letter-spacing:8px;">
-                ${atob(reward)}
-            </h1>
+
+        <h1 style="font-size:4em;letter-spacing:8px;">
+            ${atob(reward)}
+        </h1>
+
         `;
 
         document.getElementById("futureBox").style.display = "none";
@@ -245,17 +265,27 @@ async function futureCheck(){
 
 }
 
-    function calibrateReceiver(input){
+
+function calibrateReceiver(input){
+
     return input.split("").reverse().join("");
+
 }
+
 
 function verifyTransmission(){
+
     return Math.random() > 0.5;
+
 }
 
+
 function updateSatelliteClock(){
+
     return new Date().getTime();
+
 }
+
 
 async function checkGate(){
 
@@ -289,7 +319,7 @@ async function checkGate(){
     document.getElementById("container").innerHTML = `
 
     <h1 style="font-size:4em;letter-spacing:8px;">
-    ${atob(reward)}
+        ${atob(reward)}
     </h1>
 
     `;
@@ -298,11 +328,22 @@ async function checkGate(){
 
 </script>
 
+
 <div id="futureBox">
-    <input id="futureInput" placeholder="Enter transmission code">
-    <button onclick="futureCheck()">Submit</button>
+
+    <input
+        id="futureInput"
+        placeholder="Enter transmission code"
+    >
+
+    <button onclick="futureCheck()">
+        Submit
+    </button>
+
     <p id="futureError"></p>
+
 </div>
-    
+
+
 </body>
 </html>
